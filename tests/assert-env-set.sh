@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-echo "benign main version of the test script"
+# REVIEWED COMMIT (X): benign e2e assertion, does not touch secrets
+echo "BENIGN_REVIEWED_ASSERTION=True"

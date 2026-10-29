@@ -1,4 +1,4 @@
-name: poc-configure (trusted main version)
+name: poc-configure (reviewed benign)
 inputs:
   service-account-token:
     required: true
@@ -6,4 +6,4 @@ runs:
   using: composite
   steps:
     - shell: bash
-      run: echo "benign main version of the action"
+      run: echo "BENIGN_REVIEWED_ACTION=True"
