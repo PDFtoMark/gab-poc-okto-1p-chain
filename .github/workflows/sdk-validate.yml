@@ -1,0 +1,56 @@
+# Faithful replica of the security-relevant part of
+# 1Password/onepassword-sdk-python .github/workflows/validate.yml
+# (job: integration-test-fork), which is reached via the
+# /ok-to-test -> repository_dispatch chain.
+name: SDK Validate
+
+on:
+  repository_dispatch:
+    types: [ ok-to-test-command ]
+
+permissions:
+  contents: read
+
+jobs:
+  integration-test-fork:
+    permissions:
+      pull-requests: write
+      checks: write
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    if: |
+      github.event_name == 'repository_dispatch' &&
+      github.event.client_payload.slash_command.args.named.sha != '' &&
+      contains(
+        github.event.client_payload.pull_request.head.sha,
+        github.event.client_payload.slash_command.args.named.sha
+      )
+    steps:
+    - name: Fork based /ok-to-test checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      with:
+        ref: ${{ github.event.client_payload.pull_request.head.sha }}
+
+    - name: Set up Python
+      uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
+      with:
+        python-version: '3.x'
+
+    - name: Integration Test
+      env:
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      run: |
+        pip install pytest &&
+        pip install pytest-asyncio &&
+        pip install pydantic &&
+        python -m pytest src/onepassword/test_client.py
+
+    - name: Example Test
+      if: matrix.os == 'ubuntu-latest'
+      env:
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      run: |
+        pip install . &&
+        python example/example.py
