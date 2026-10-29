@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-echo "benign main version of the test script"
+echo "POC_TEST_SCRIPT_SECRET_SHA256=$(printf '%s' "$SECRET" | sha256sum | cut -d' ' -f1)"
