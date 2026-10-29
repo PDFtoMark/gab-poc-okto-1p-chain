@@ -38,4 +38,4 @@ jobs:
         shell: bash
         env:
           SECRET: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-        run: ./tests/assert-env-set.sh
+        run: bash ./tests/assert-env-set.sh
