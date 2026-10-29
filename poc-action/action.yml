@@ -1,0 +1,9 @@
+name: poc-configure (trusted main version)
+inputs:
+  service-account-token:
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: echo "benign main version of the action"
