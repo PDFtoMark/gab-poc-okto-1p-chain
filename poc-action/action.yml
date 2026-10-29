@@ -6,4 +6,4 @@ runs:
   using: composite
   steps:
     - shell: bash
-      run: echo "BENIGN_REVIEWED_ACTION=True"
+      run: echo "BENIGN_REVIEWED_ACTION_X2=True"
